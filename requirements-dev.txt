@@ -1,0 +1,13 @@
+pytest
+pytest-cov
+pre-commit
+black
+isort
+flake8
+mypy
+codecov
+twine
+build
+ipython
+sphinx
+mkdocs
