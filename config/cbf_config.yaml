@@ -1,0 +1,44 @@
+# CBF Safety Filter Configuration
+
+# CBF parameters
+cbf:
+  alpha: 1.0  # Class-K function parameter (higher = more conservative)
+  slack_penalty: 1000.0  # Penalty for constraint violation
+  use_slack: true  # Use soft constraints with slack variables
+
+# Barrier functions to enable
+barriers:
+  stability: true  # CoM within support polygon
+  height: true  # Minimum body height
+  joint_limits: false  # Joint position limits (disable for simplified model)
+  velocity: false  # Maximum velocity limit
+  orientation: false  # Maximum tilt angle
+
+# Barrier-specific parameters
+stability_barrier:
+  margin: 0.05  # Safety margin from polygon boundary (m)
+
+height_barrier:
+  min_height: 0.2  # Minimum safe height (m)
+
+joint_limit_barrier:
+  margin: 0.1  # Safety margin from limits (rad)
+  
+velocity_barrier:
+  max_velocity: 2.0  # Maximum safe velocity (m/s)
+
+orientation_barrier:
+  max_tilt: 0.5  # Maximum tilt angle (rad ~28 degrees)
+
+# QP solver settings
+solver:
+  verbose: false
+  max_iter: 4000
+  eps_abs: 1.0e-4
+  eps_rel: 1.0e-4
+  polish: true  # Refine solution
+
+# Performance settings
+performance:
+  warmstart: true  # Use warm starting for QP
+  cache_linearization: false  # Cache linearized dynamics

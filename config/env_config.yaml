@@ -1,0 +1,90 @@
+# Environment Configuration
+
+# Quadruped robot parameters
+robot:
+  name: "quadruped"
+  num_legs: 4
+  joints_per_leg: 3
+  mass: 10.0  # kg
+  
+  # Joint limits (hip, thigh, calf) per leg
+  joint_limits:
+    lower: [-0.8, -1.5, -2.5]  # radians
+    upper: [0.8, 0.5, -0.5]
+  
+  # Initial pose
+  initial_position: [0.0, 0.0, 0.3]
+  initial_orientation: [0.0, 0.0, 0.0]  # roll, pitch, yaw
+
+# Simulation parameters
+simulation:
+  timestep: 0.00416667  # 1/240 seconds (PyBullet default)
+  control_freq: 50  # Hz
+  gravity: -9.81  # m/s^2
+
+# Terrain settings
+terrain:
+  types:
+    flat:
+      description: "Flat ground plane"
+      difficulty: 0.0
+    
+    rough:
+      description: "Random heightfield terrain"
+      difficulty: 0.5
+      max_height: 0.1  # meters
+      smoothing: 3.0  # Gaussian sigma
+    
+    slopes:
+      description: "Sloped terrain"
+      difficulty: 0.5
+      max_slope: 0.2  # radians (~11 degrees)
+    
+    stairs:
+      description: "Staircase terrain"
+      difficulty: 0.7
+      step_height: 0.08  # meters
+      step_depth: 0.4  # meters
+      num_steps: 10
+    
+    mixed:
+      description: "Mixed terrain with obstacles"
+      difficulty: 0.8
+      num_obstacles: 10
+      obstacle_size: [0.1, 0.3]  # min, max size
+
+# Observation space (53-dim)
+observation:
+  include_body_pos: true  # 3
+  include_body_orn: true  # 4 (quaternion)
+  include_linear_vel: true  # 3
+  include_angular_vel: true  # 3
+  include_joint_pos: true  # 12
+  include_joint_vel: true  # 12
+  include_foot_contacts: true  # 4
+  include_prev_action: true  # 12
+
+# Action space (12-dim)
+action:
+  type: "joint_positions"  # or "joint_torques"
+  normalized: true  # Actions in [-1, 1]
+  
+# Reward function weights
+reward:
+  forward_velocity: 1.5
+  lateral_penalty: -0.5
+  height_penalty: -10.0
+  height_threshold: 0.2
+  orientation_penalty: -0.5
+  energy_penalty: -0.01
+  smoothness_penalty: -0.05
+  survival_bonus: 0.1
+  fall_penalty: -100.0
+
+# Episode settings
+episode:
+  max_steps: 1000
+  early_termination:
+    on_fall: true
+    fall_height: 0.15  # meters
+    max_tilt: 1.0  # radians (~57 degrees)

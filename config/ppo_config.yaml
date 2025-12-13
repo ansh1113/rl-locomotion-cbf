@@ -1,0 +1,42 @@
+# PPO Training Configuration
+
+# Environment settings
+env:
+  terrain_type: "mixed"
+  terrain_difficulty: 0.5
+  control_freq: 50
+  render: false
+
+# PPO hyperparameters
+ppo:
+  learning_rate: 3.0e-4
+  n_steps: 2048
+  batch_size: 64
+  n_epochs: 10
+  gamma: 0.99
+  gae_lambda: 0.95
+  clip_range: 0.2
+  clip_range_vf: null  # No clipping for value function
+  ent_coef: 0.01  # Entropy coefficient
+  vf_coef: 0.5  # Value function coefficient
+  max_grad_norm: 0.5
+  policy: "MlpPolicy"
+
+# Network architecture
+network:
+  hidden_sizes: [256, 256]
+  activation: "relu"
+
+# Training settings
+training:
+  total_timesteps: 1000000
+  save_freq: 50000
+  eval_freq: 10000
+  n_eval_episodes: 5
+  verbose: 1
+
+# Logging
+logging:
+  log_dir: "logs/"
+  tensorboard: true
+  save_replay_buffer: false
