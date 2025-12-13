@@ -89,8 +89,10 @@ class QPSolver:
         # Solve
         result = self.solver.solve()
         
-        # Check status
-        if result.info.status == 'solved' or result.info.status == 'solved inaccurate':
+        # Check status - use string comparison as OSQP returns strings
+        # Valid statuses: 'solved', 'solved inaccurate', 'primal infeasible', etc.
+        SOLVED_STATUSES = ('solved', 'solved inaccurate')
+        if result.info.status in SOLVED_STATUSES:
             return result.x, result.info.status
         else:
             return None, result.info.status

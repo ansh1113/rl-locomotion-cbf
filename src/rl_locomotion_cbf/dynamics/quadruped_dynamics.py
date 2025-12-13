@@ -55,7 +55,7 @@ class QuadrupedDynamics:
         
         # Position derivative = velocity
         if len(state) >= 6:
-            drift[0:3] = state[3:6] if len(state) >= 6 else np.zeros(3)
+            drift[0:3] = state[3:6]
         
         # Velocity derivative = acceleration (gravity + forces)
         drift[3] = 0  # x acceleration

@@ -61,11 +61,21 @@ class QuadrupedEnv(gym.Env):
             dtype=np.float32
         )
         
-        # Observation space: 48-dimensional as described in README
-        # [body pos(3), body orn(4), linear vel(3), angular vel(3),
-        #  joint positions(12), joint velocities(12), foot contacts(4),
-        #  previous action(12)]
-        obs_dim = 3 + 4 + 3 + 3 + 12 + 12 + 4 + 12  # = 53 (adjusted)
+        # Observation space: 53-dimensional as described in README
+        # Components:
+        OBS_BODY_POS = 3        # Body position
+        OBS_BODY_ORN = 4        # Body orientation (quaternion)
+        OBS_LINEAR_VEL = 3      # Linear velocity
+        OBS_ANGULAR_VEL = 3     # Angular velocity
+        OBS_JOINT_POS = 12      # Joint positions
+        OBS_JOINT_VEL = 12      # Joint velocities
+        OBS_FOOT_CONTACTS = 4   # Foot contacts
+        OBS_PREV_ACTION = 12    # Previous action
+        
+        obs_dim = (OBS_BODY_POS + OBS_BODY_ORN + OBS_LINEAR_VEL + 
+                   OBS_ANGULAR_VEL + OBS_JOINT_POS + OBS_JOINT_VEL +
+                   OBS_FOOT_CONTACTS + OBS_PREV_ACTION)  # = 53
+        
         self.observation_space = spaces.Box(
             low=-np.inf,
             high=np.inf,
@@ -172,8 +182,21 @@ class QuadrupedEnv(gym.Env):
         )
         
         # Smooth the terrain
-        from scipy import ndimage
-        terrain_data = ndimage.gaussian_filter(terrain_data, sigma=3)
+        try:
+            from scipy import ndimage
+            terrain_data = ndimage.gaussian_filter(terrain_data, sigma=3)
+        except ImportError:
+            # Fallback to simpler smoothing if scipy not available
+            # Use simple averaging filter
+            kernel_size = 3
+            padded = np.pad(terrain_data, kernel_size//2, mode='edge')
+            smoothed = np.zeros_like(terrain_data)
+            for i in range(terrain_data.shape[0]):
+                for j in range(terrain_data.shape[1]):
+                    smoothed[i, j] = np.mean(
+                        padded[i:i+kernel_size, j:j+kernel_size]
+                    )
+            terrain_data = smoothed
         
         # Create collision shape
         terrain_shape_id = p.createCollisionShape(
@@ -225,8 +248,17 @@ class QuadrupedEnv(gym.Env):
     
     def _apply_action(self, joint_targets: np.ndarray):
         """Apply joint position targets to robot."""
-        # In a full implementation with URDF, this would use p.setJointMotorControlArray
-        # For simplified robot, we apply forces to maintain position
+        # For full implementation with URDF, use p.setJointMotorControlArray
+        # Current simplified robot doesn't have joints, so this is a no-op
+        # When using a proper quadruped URDF:
+        # p.setJointMotorControlArray(
+        #     self.robot_id,
+        #     jointIndices=range(self.num_joints),
+        #     controlMode=p.POSITION_CONTROL,
+        #     targetPositions=joint_targets,
+        #     forces=[max_force] * self.num_joints,
+        #     physicsClientId=self.client
+        # )
         pass
     
     def _denormalize_action(self, action: np.ndarray) -> np.ndarray:
