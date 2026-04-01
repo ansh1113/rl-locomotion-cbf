@@ -128,7 +128,7 @@ pip3 install numpy scipy matplotlib
 ### Install from Source
 
 ```bash
-git clone https://github.com/yourusername/rl-locomotion-cbf.git
+git clone https://github.com/ansh1113/rl-locomotion-cbf.git
 cd rl-locomotion-cbf
 pip3 install -e .
 ```
