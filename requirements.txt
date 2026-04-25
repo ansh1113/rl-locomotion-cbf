@@ -3,6 +3,6 @@ scipy>=1.7.0
 osqp>=0.6.0
 gym>=0.21.0
 pybullet>=3.2.0
-stable-baselines3>=1.6.0
+stable-baselines3>=2.7.1
 torch>=1.10.0
 matplotlib>=3.4.0
