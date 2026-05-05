@@ -7,15 +7,15 @@
 
 **A safe reinforcement learning framework for quadruped locomotion combining PPO with Control Barrier Functions (CBF) for provably safe operation.**
 
-## 🎯 Key Results
+## Key Results
 
-- ✅ **Zero Falls** - 0 falls achieved across all test terrains
-- ✅ **99% Safety Rate** - CBF layer successfully rejects 99% of unsafe actions
-- ✅ **90% Speed Retained** - Maintains 90% of unconstrained PPO policy speed
-- ✅ **Provable Safety** - Mathematical guarantee that robot remains stable
-- ✅ **Real-time** - Safety filter runs at 200+ Hz
+- **Zero Falls** - 0 falls achieved across all test terrains
+- **99% Safety Rate** - CBF layer successfully rejects 99% of unsafe actions
+- **90% Speed Retained** - Maintains 90% of unconstrained PPO policy speed
+- **Provable Safety** - Mathematical guarantee that robot remains stable
+- **Real-time** - Safety filter runs at 200+ Hz
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Overview](#overview)
 - [Motivation](#motivation)
